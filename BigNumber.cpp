@@ -40,7 +40,7 @@ string BigNumber::userVisibleRepresentation()
 BigNumber BigNumber::sum(BigNumber other)
 {
     BigNumber duplicate(nonNegative, integerDigits, decimalDigits);
-    if (not(nonNegative == other.isNonNegative()))
+    if (nonNegative xor other.isNonNegative())
     {
         if (hasGreaterAbsoluteValueThan(other))
         {
@@ -130,7 +130,7 @@ BigNumber BigNumber::sum(BigNumber other)
 BigNumber BigNumber::difference(BigNumber other)
 {
     BigNumber duplicate(nonNegative, integerDigits, decimalDigits);
-    if (not(nonNegative == other.isNonNegative()))
+    if (nonNegative xor other.isNonNegative())
     {
         if (hasGreaterAbsoluteValueThan(other))
         {
@@ -252,7 +252,7 @@ BigNumber BigNumber::product(BigNumber other)
                         * Zero multiplied by any number returns zero.
                         */
     }
-    if (not(nonNegative == other.isNonNegative()))
+    if (nonNegative xor other.isNonNegative())
         product.setNonNegative(false);/*
                                        * A negative multiplied by a positive
                                        * returns a negative.
@@ -686,7 +686,10 @@ bool BigNumber::hasEqualAbsoluteValueTo(BigNumber other)
 
 bool BigNumber::isGreaterThan(BigNumber other)
 {
-    return (hasGreaterAbsoluteValueThan(other) xor (not nonNegative));
+    if (hasGreaterAbsoluteValueThan(other))
+        return nonNegative;
+    else
+        return nonNegative and (not other.isNonNegative());
     /*
      * If a positive number has a greater absolute value than another number, it 
      * must be greater than it. On the other hand, if a negative number has a 
@@ -696,7 +699,10 @@ bool BigNumber::isGreaterThan(BigNumber other)
 
 bool BigNumber::isLessThan(BigNumber other)
 {
-    return (hasLowerAbsoluteValueThan(other) xor (not nonNegative));
+    if (hasGreaterAbsoluteValueThan(other))
+        return nonNegative;
+    else
+        return nonNegative and (not other.isNonNegative());
     /*
      * If a positive number has a lower absolute value than another number, it 
      * must be less than it. On the other hand, if a negative number has a lower
@@ -706,7 +712,7 @@ bool BigNumber::isLessThan(BigNumber other)
 
 bool BigNumber::isEqualTo(BigNumber other)
 {
-    return (nonNegative == other.isNonNegative()) and hasEqualAbsoluteValueTo(other);
+    return not(nonNegative xor other.isNonNegative()) and hasEqualAbsoluteValueTo(other);
     /*
      * If two numbers have the same absolute value, they must be either both 
      * negative or nonnegative to be equal.
