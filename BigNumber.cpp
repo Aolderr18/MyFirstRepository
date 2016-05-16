@@ -526,13 +526,11 @@ bool BigNumber::hasGreaterAbsoluteValueThan(BigNumber other)
         totalLength = other.getIntegerDigits().length();
         differenceInLength = other.getIntegerDigits().length() - integerDigits.length();
     }
-    while (--differenceInLength)
-    {
+    while (--differenceInLength + 1)
         if (integerDigits.length() > other.getIntegerDigits().length())
             comparativeB << "0";
         else
             comparativeA << "0";
-    }
     comparativeA << integerDigits;
     comparativeB << other.getIntegerDigits();
     unsigned comparisonIndex = 0;
@@ -565,13 +563,11 @@ bool BigNumber::hasGreaterAbsoluteValueThan(BigNumber other)
         differenceInLength = 1 + std::abs(integerDigits.length() - other.getIntegerDigits().length());
         comparativeA << decimalDigits;
         comparativeB << other.getDecimalDigits();
-        while (--differenceInLength)
-        {
+        while (--differenceInLength + 1)
             if (decimalDigits.length() > other.getDecimalDigits().length())
                 comparativeB << "0";
             else if (decimalDigits.length() < other.getDecimalDigits().length())
                 comparativeA << "0";
-        }
         BigNumber newComparativeA(comparativeA.str(), ""), newComparativeB(comparativeB.str(), "");
         return newComparativeA.hasGreaterAbsoluteValueThan(newComparativeB);
     }
@@ -592,13 +588,11 @@ bool BigNumber::hasLowerAbsoluteValueThan(BigNumber other)
         totalLength = other.getIntegerDigits().length();
         differenceInLength = other.getIntegerDigits().length() - integerDigits.length();
     }
-    while (--differenceInLength)
-    {
+    while (--differenceInLength + 1)
         if (integerDigits.length() > other.getIntegerDigits().length())
             comparativeB << "0";
         else
             comparativeA << "0";
-    }
     comparativeA << integerDigits;
     comparativeB << other.getIntegerDigits();
     unsigned comparisonIndex = 0;
@@ -617,13 +611,11 @@ bool BigNumber::hasLowerAbsoluteValueThan(BigNumber other)
         differenceInLength = 1 + std::abs(integerDigits.length() - other.getIntegerDigits().length());
         comparativeA << decimalDigits;
         comparativeB << other.getDecimalDigits();
-        while (--differenceInLength)
-        {
+        while (--differenceInLength + 1)
             if (decimalDigits.length() > other.getDecimalDigits().length())
                 comparativeB << "0";
             else if (decimalDigits.length() < other.getDecimalDigits().length())
                 comparativeA << "0";
-        }
         BigNumber newComparativeA(comparativeA.str(), ""), newComparativeB(comparativeB.str(), "");
         return newComparativeA.hasLowerAbsoluteValueThan(newComparativeB);
     }
@@ -644,13 +636,11 @@ bool BigNumber::hasEqualAbsoluteValueTo(BigNumber other)
         totalLength = other.getIntegerDigits().length();
         differenceInLength = other.getIntegerDigits().length() - integerDigits.length();
     }
-    while (--differenceInLength)
-    {
+    while (--differenceInLength + 1)
         if (integerDigits.length() > other.getIntegerDigits().length())
             comparativeB << "0";
         else
             comparativeA << "0";
-    }
     comparativeA << integerDigits;
     comparativeB << other.getIntegerDigits();
     unsigned comparisonIndex = 0;
@@ -671,13 +661,11 @@ bool BigNumber::hasEqualAbsoluteValueTo(BigNumber other)
         differenceInLength = 1 + std::abs(integerDigits.length() - other.getIntegerDigits().length());
         comparativeA << decimalDigits;
         comparativeB << other.getDecimalDigits();
-        while (--differenceInLength)
-        {
+        while (--differenceInLength + 1)
             if (decimalDigits.length() > other.getDecimalDigits().length())
                 comparativeB << "0";
             else if (decimalDigits.length() < other.getDecimalDigits().length())
                 comparativeA << "0";
-        }
         BigNumber newComparativeA(comparativeA.str(), ""), newComparativeB(comparativeB.str(), "");
         return newComparativeA.hasEqualAbsoluteValueTo(newComparativeB);
     }
