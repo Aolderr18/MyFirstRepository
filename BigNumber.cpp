@@ -476,8 +476,8 @@ void BigNumber::trimZeros()
     if (decimalDigits.length())
         try
         {
-            while (decimalDigits.at(0) == '0')
-                setDecimalDigits(decimalDigits.substr(1, decimalDigits.length() - 1));
+            while (decimalDigits.at(decimalDigits.length() - 1) == '0')
+                setDecimalDigits(decimalDigits.substr(0, decimalDigits.length() - 1));
             /*
              * The decimal digits should be repeatedly updated until they no longer
              * end with a "0".
