@@ -507,8 +507,12 @@ void BigNumber::round(int place)
              */
         }
     else
-        setIntegerDigits(integerDigits.substr(0, integerDigits.length() - place) + "0");
-	setDecimalDigits("");
+        {
+            setIntegerDigits(integerDigits.substr(0, integerDigits.length() - place));
+            while (--place + 1)
+                setIntegerDigits(integerDigits + "0");
+	    setDecimalDigits("");
+        }
 }
 
 bool BigNumber::hasGreaterAbsoluteValueThan(BigNumber other)
