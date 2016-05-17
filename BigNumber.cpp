@@ -313,21 +313,21 @@ BigNumber BigNumber::product(BigNumber other)
     {
         stringstream productRow;
         unsigned rowShift = operand2.str().length() - 1 - indexB;
-        while (rowShift)
-        {
+        while (--rowShift + 1)
             productRow << "0";
-            rowShift--;
-        }
         for (indexA = operand1.str().length() - 1; indexA + 1; indexA--)
         {
-            unsigned placeProduct = carry + operand1.str().at(indexA) * operand2.str().at(indexB) - 96;
+            unsigned placeProduct = carry + (operand1.str().at(indexA) - 48) * (operand2.str().at(indexB) - 48);
             carry = (placeProduct - placeProduct % 10) / 10;
             placeProduct %= 10;
             productRow << placeProduct;
         }
         productRow << carry;
         carry = 0;
-        productRows[operand2.str().length() - indexB] = productRow.str();
+        stringstream reversedProductRow; // Each product row must be reversed
+        for (int h = productRow.str().length() - 1; h + 1; h--)
+            reversedProductRow << productRow.str().at(h);
+        productRows[operand2.str().length() - indexB - 1] = reversedProductRow.str();
     }
     unsigned index;
     for (index = 0; operand2.str().length() - index; index++)
@@ -337,9 +337,9 @@ BigNumber BigNumber::product(BigNumber other)
     }
     stringstream productIntegerDigits, productDecimalDigits;
     string productDigits = product.getIntegerDigits();
-    for (index = productDigits.length() - 1; index + 1; index--)
+    for (index = 0; productDigits.length() - index; index++)
     {
-        if (index < digitsAfterDecimal)
+        if (index >= digitsAfterDecimal)
         {
             productDecimalDigits << productDigits.at(index);
             continue;
