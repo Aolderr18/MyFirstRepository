@@ -285,24 +285,24 @@ BigNumber BigNumber::product(BigNumber other)
     }
     operand1 << integerDigits << decimalDigits;
     operand2 << other.getIntegerDigits() << other.getDecimalDigits();
-    unsigned digitsAfterDecimal = 0;
+    unsigned digitsAfterDecimal = decimalDigits.length() + other.getDecimalDigits().length();
     if (decimalDigits.length() > other.getDecimalDigits().length())
     {
-        digitsAfterDecimal = decimalDigits.length();
         differenceInLength = decimalDigits.length() - other.getDecimalDigits().length();
         while (differenceInLength)
         {
             operand2 << "0";
+            digitsAfterDecimal++;
             differenceInLength--;
         }
     }
     else
     {
-        digitsAfterDecimal = other.getDecimalDigits().length();
         differenceInLength = other.getDecimalDigits().length() - decimalDigits.length();
         while (differenceInLength)
         {
             operand1 << "0";
+            digitsAfterDecimal++;
             differenceInLength--;
         }
     }
@@ -339,7 +339,7 @@ BigNumber BigNumber::product(BigNumber other)
     string productDigits = product.getIntegerDigits();
     for (index = 0; productDigits.length() - index; index++)
     {
-        if (index >= digitsAfterDecimal)
+        if (index + 1 > productDigits.length() - digitsAfterDecimal)
         {
             productDecimalDigits << productDigits.at(index);
             continue;
@@ -406,8 +406,9 @@ BigNumber BigNumber::power(int x)
     if (x == 1)
         return duplicate; // Any number raised to the first power is itself.
     BigNumber Power("1", "");
+    Power.setNonNegative(true);
     unsigned times = 0;
-    while (x - ++times)
+    while (x - ++times + 1)
         Power = Power.product(duplicate);
     return Power;
 }
@@ -437,6 +438,7 @@ BigNumber BigNumber::root(int x)
 		    break;
                 }
             Root = Root.sum(increment);
+            temp = Root.power(x);
         }
         if (decrementNecessary)
             Root = Root.difference(increment);
@@ -497,7 +499,7 @@ void BigNumber::round(int place)
     if (place < 0)
         try
         {
-            setDecimalDigits(decimalDigits.substr(0, -place));
+            setDecimalDigits(decimalDigits.substr(0, -1 * place));
         }
         catch (std::exception outOfBounds)
         {
@@ -507,12 +509,12 @@ void BigNumber::round(int place)
              */
         }
     else
-        {
-            setIntegerDigits(integerDigits.substr(0, integerDigits.length() - place));
-            while (--place + 1)
-                setIntegerDigits(integerDigits + "0");
-	    setDecimalDigits("");
-        }
+    {
+        setIntegerDigits(integerDigits.substr(0, integerDigits.length() - place));
+        while (--place + 1)
+            setIntegerDigits(integerDigits + "0");
+	setDecimalDigits("");
+    }
 }
 
 bool BigNumber::hasGreaterAbsoluteValueThan(BigNumber other)
